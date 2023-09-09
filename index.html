@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User API</title>
+    <style>
+        .p {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+
+    <input id="input" placeholder="Enter total data" type="text">
+    <button onclick="showMe()">Show me</button>
+
+    <div id="names">
+
+    </div>
+    <div id="details">
+
+    </div>
+
+    <script>
+        function showMe() {
+            const value = document.getElementById("input").value;
+            fetch("https://jsonplaceholder.typicode.com/users/")
+                .then(res => res.json())
+                .then(data => {
+                    const name = document.getElementById("names");
+                    name.innerText = "";
+                    for (let i = 0; i < value; i++) {
+                        const userName = data[i].name;
+                        const userId = data[i].id;
+                        const p = document.createElement("p");
+                        p.innerHTML = `<h3>${userName}</h3>   <button oncLick="detailsFunction(${userId})">Details</button>`;
+                        name.appendChild(p);
+                    }
+                });
+            document.getElementById("input").value = "";
+        }
+
+
+
+        function detailsFunction(id) {
+            fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    const details = document.getElementById("details");
+                    const p = document.createElement("p");
+                    details.innerHTML = `
+                    <p class="p">Username: ${data.username}
+                    Email: ${data.email}
+                    Id: ${data.id}</p>
+                    `;
+                    // details.appendChild(p);
+
+                });
+        };
+
+    </script>
+</body>
+
+</html>
